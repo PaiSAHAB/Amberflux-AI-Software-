@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Models</title>
+    <!-- Add this link in your index.html template -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        form {
+            margin-bottom: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 10px;
+            color: #2F5597;
+        }
+
+        input[type="text"] {
+            padding: 15px;
+            width: 500px;
+            border: 2px solid #2F5597;
+            border-radius: 15px;
+            outline: none;
+        }
+
+        input[type="submit"] {
+            margin: 20px;
+            padding: 15px 35px;
+            background-color: #2F5597;
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #1B3B73;
+        }
+
+
+        .response-container {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+        }
+
+        .response-column {
+            flex: 1;
+            padding: 10px;
+            margin: 10px;
+        }
+
+        .response {
+            white-space: pre-wrap;
+        }
+
+        .separator-line {
+            margin: 0 10px;
+            border-right: 2px solid #2F5597;
+        }
+
+        .rating-stars {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .rating-stars input {
+            display: none;
+        }
+
+        .rating-stars label {
+            cursor: pointer;
+            font-size: 35px;
+            color: #473b3b;
+            transition: color 0.2s;
+        }
+
+        .rating-stars label:before {
+            content: '\2605'; /* Unicode star character */
+        }
+
+        .rating-stars input:checked ~ label {
+            color: #e9c00b; /* Color for the selected star */
+        }
+
+        .rating-container {
+            margin-top: 0px;
+            margin-bottom: 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .response-column h6 {
+        font-size: 14px;
+        margin-bottom: 0px;
+        color: #000000;
+        text-align:center;
+        text-transform: capitalize;
+        }
+
+        .overall-ratings-container {
+        /* Fix the container to the top right corner of the viewport */
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        padding: 0px;
+        }
+
+
+        .overall-ratings-container h6 {
+            font-size: 14px;
+            margin-bottom: 0px;
+            color: #000000;
+            text-align: center;
+            text-transform: capitalize;
+        }
+
+    </style>
+</head>
+<body>
+    <h1>
+        <span style="color: #2F5597; font-family: 'Avenir';">Amber</span><span style="color: #C55A11; font-family: 'Avenir';">Flux</span>
+    </h1>
+    <!-- Add container for overall ratings at the top right corner -->
+    <div class="overall-ratings-container">
+        <div class="rating-container">
+            <div class="response-column">
+                <h6>Overall ChatGPT Rating:</h6>
+                <!-- Add a container to display the star rating -->
+                <div class="rating-stars" id="chatgpt_star_rating">
+                    <!-- Placeholder for the rating stars -->
+                </div>
+            </div>
+            <div class="response-column">
+                <h6>Overall Bard Rating:</h6>
+                <!-- Add a container to display the star rating -->
+                <div class="rating-stars" id="bard_star_rating">
+                    <!-- Placeholder for the rating stars -->
+                </div>
+            </div>
+        </div>
+    </div>
+    <form method="POST" action="/submit">
+        <label for="query">Query:</label>
+        <input type="text" id="query" name="query" required>
+        <!-- Add the profession input field here -->
+        <!-- <label for="profession">Profession:</label>
+        <input type="text" id="profession" name="profession" required> -->
+        <input type="submit" value="Submit">
+    </form>
+
+    {% if chatgpt_response and bard_response %}
+    <div class="response-container">
+        <div class="response-column">
+            <h2>ChatGPT Response:</h2>
+            <!-- Display the user's query for ChatGPT response -->
+            <h4 style="color: #C55A11; font-family: 'Avenir';">Query: {{ query | safe }}</h4>
+            <div class="response">
+                <p>{{ chatgpt_response | safe }}</p>
+            </div>
+            <div class="rating-container">
+                <form method="POST" action="/submit_chatgpt_rating">
+                    <input type="hidden" id="hidden_chatgpt_query" name="hidden_chatgpt_query" value="{{ query }}">
+                    <label for="chatgpt_rating">Rate the ChatGPT response:</label>
+                    <div class="rating-stars">
+                        <input type="radio" id="chatgpt_star5" name="chatgpt_rating" value="5">
+                        <label for="chatgpt_star5"></label>
+                        <input type="radio" id="chatgpt_star4" name="chatgpt_rating" value="4">
+                        <label for="chatgpt_star4"></label>
+                        <input type="radio" id="chatgpt_star3" name="chatgpt_rating" value="3">
+                        <label for="chatgpt_star3"></label>
+                        <input type="radio" id="chatgpt_star2" name="chatgpt_rating" value="2">
+                        <label for="chatgpt_star2"></label>
+                        <input type="radio" id="chatgpt_star1" name="chatgpt_rating" value="1">
+                        <label for="chatgpt_star1"></label>
+                    </div>
+                    <input type="submit" value="Submit ChatGPT Rating">
+                </form>
+            </div>
+        </div>
+        <div class="separator-line"></div>
+        <div class="response-column">
+            <h2>Bard Response:</h2>
+            <!-- Display the user's query for ChatGPT response -->
+            <h4 style="color: #C55A11; font-family: 'Avenir';">Query: {{ query | safe }}</h4>
+            <div class="response">
+                <p>{{ bard_response | safe }}</p>
+            </div>
+            <div class="rating-container">
+                <form method="POST" action="/submit_bard_rating">
+                    <input type="hidden" id="hidden_bard_query" name="hidden_bard_query" value="{{ query }}">
+                    <label for="bard_rating">Rate the Bard response:</label>
+                    <div class="rating-stars">
+                        <input type="radio" id="bard_star5" name="bard_rating" value="5">
+                        <label for="bard_star5"></label>
+                        <input type="radio" id="bard_star4" name="bard_rating" value="4">
+                        <label for="bard_star4"></label>
+                        <input type="radio" id="bard_star3" name="bard_rating" value="3">
+                        <label for="bard_star3"></label>
+                        <input type="radio" id="bard_star2" name="bard_rating" value="2">
+                        <label for="bard_star2"></label>
+                        <input type="radio" id="bard_star1" name="bard_rating" value="1">
+                        <label for="bard_star1"></label>
+                    </div>
+                    <input type="submit" value="Submit Bard Rating">
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Your other content goes here -->
+
+    <script>
+        // JavaScript function to set the hidden query field before submitting the rating forms
+        document.addEventListener('DOMContentLoaded', function () {
+            const queryInput = document.getElementById('query');
+            const hiddenChatGptQueryInput = document.getElementById('hidden_chatgpt_query');
+            const hiddenBardQueryInput = document.getElementById('hidden_bard_query');
+
+            // Set the value of the hidden fields to the query value when the main form is submitted
+            const mainForm = document.getElementsByTagName('form')[0];
+            mainForm.addEventListener('submit', function (event) {
+                hiddenChatGptQueryInput.value = queryInput.value;
+                hiddenBardQueryInput.value = queryInput.value;
+            });
+        });
+    </script>
+    <!-- Add this JavaScript code to convert average ratings into star ratings -->
+    <script>
+        function displayStarRating(containerId, averageRating, numReviews) {
+            const container = document.getElementById(containerId);
+            const roundedRating = Math.round(averageRating); // Round the average rating to the nearest whole number
+            let starsHtml = '';
+    
+            // Add full stars
+            for (let i = 0; i < roundedRating; i++) {
+                starsHtml += '<label for="average_star" style="color: #fdd835;"></label>';
+            }
+    
+            // Add empty stars (up to 5 total stars)
+            for (let i = roundedRating; i < 5; i++) {
+                starsHtml += '<label for="average_star" style="color: #ccc;"></label>';
+            }
+    
+            // Add the number of reviews in brackets
+            starsHtml += `<span style="margin-left: 10px;">(${numReviews} review${numReviews !== 1 ? 's' : ''})</span>`;
+    
+            container.innerHTML = starsHtml;
+        }
+    
+        // Call the function to display the star ratings
+        document.addEventListener('DOMContentLoaded', function () {
+            // Replace `chatgpt_average_rating` and `bard_average_rating` with the actual average rating values
+            const chatgptAverageRating = parseFloat("{{ chatgpt_average_rating }}");
+            const bardAverageRating = parseFloat("{{ bard_average_rating }}");
+            const chatgptNumReviews = parseInt("{{ chatgpt_num_reviews }}");
+            const bardNumReviews = parseInt("{{ bard_num_reviews }}");
+    
+            displayStarRating('chatgpt_star_rating', chatgptAverageRating, chatgptNumReviews);
+            displayStarRating('bard_star_rating', bardAverageRating, bardNumReviews);
+        });
+    </script>
+</body>
+</html>
