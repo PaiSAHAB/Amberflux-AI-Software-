@@ -1,0 +1,15 @@
+Query: Essay on digital marketing
+ChatGPT Rating: 2
+
+Query: How to make a car?
+ChatGPT Rating: 2
+
+Query: LLM's?
+ChatGPT Rating: 1
+
+Query: How is the richest man in the world?
+ChatGPT Rating: 2
+
+Query: Make a plan for a five day trip to Mexico?
+ChatGPT Rating: 2
+

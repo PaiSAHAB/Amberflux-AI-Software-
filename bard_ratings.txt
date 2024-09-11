@@ -1,0 +1,15 @@
+Query: Essay on digital marketing
+Bard Rating: 5
+
+Query: How to make a car?
+Bard Rating: 4
+
+Query: LLM's?
+Bard Rating: 5
+
+Query: How is the richest man in the world?
+Bard Rating: 5
+
+Query: Make a plan for a five day trip to Mexico?
+Bard Rating: 4
+
